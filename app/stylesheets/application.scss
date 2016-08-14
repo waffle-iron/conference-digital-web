@@ -1,5 +1,4 @@
 $images-dir: '/images/';
-
-body {
-  background: #fff;
-}
+@import 'top-nav';
+@import 'main-content';
+@import 'side-nav';

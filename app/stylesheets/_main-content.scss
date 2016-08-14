@@ -1,0 +1,16 @@
+@import 'conditionals';
+
+.page-wrapper {
+  padding: 50px 0 0 0;
+
+  @include media(tablet) {
+    .page-wrapper {
+      padding: 50px 0 0 225px;
+    }
+  }
+
+}
+
+main {
+  padding: 20px;
+}
