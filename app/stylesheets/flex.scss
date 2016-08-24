@@ -1,0 +1,59 @@
+@import "colours";
+@import 'conditionals';
+
+.flex-layout {
+  display: flex;
+  flex-direction: column;
+  @include media(tablet) {
+    min-height: 100vh;
+  }
+}
+
+.flex-body {
+  position: relative;
+  @include media(tablet) {
+    display: flex;
+    flex: 1;
+  }
+}
+
+
+.flex-body__content {
+  flex: none;
+  display: block;
+  @include media(tablet) {
+    display: flex;
+    flex: 1;
+  }
+}
+
+.flex-body__nav {
+  flex: none;
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  &.expanded {
+    display: block;
+    @include media(tablet) {
+      display: flex;
+    }
+  }
+
+  @include media(tablet) {
+    position: static;
+    display: flex;
+    flex: 0 0 10em;
+  }
+  @include media(desktop) {
+    flex: 0 0 14em;
+  }
+}
+
+.flex-body__nav {
+  /* put the nav on the left */
+  order: -1;
+  background: $dark;
+}
