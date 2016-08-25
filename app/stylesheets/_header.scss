@@ -1,0 +1,22 @@
+@import 'colours';
+
+header {
+  flex: none;
+  display: block;
+  background: #222;
+  color: $burnedOrange;
+  padding: 5px 20px;
+
+  .navbar-toggler {
+    color: $lightGrey;
+  }
+
+  .navbar-brand {
+    color: $burnedOrange;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+
+}

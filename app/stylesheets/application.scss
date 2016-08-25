@@ -1,5 +1,8 @@
 $images-dir: '/images/';
+@import "bootstrap-flex";
+@import "colours";
+@import "nav";
+@import "header";
+@import "flex";
 
-body {
-  background: #fff;
-}
+

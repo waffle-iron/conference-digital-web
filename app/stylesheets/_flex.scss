@@ -1,0 +1,58 @@
+@import "colours";
+@import "mixins/breakpoints";
+
+.flex-layout {
+  display: flex;
+  flex-direction: column;
+  @include media-breakpoint-up(md) {
+    min-height: 100vh;
+  }
+}
+
+.flex-body {
+  position: relative;
+  @include media-breakpoint-up(md) {
+    display: flex;
+    flex: 1;
+  }
+}
+
+
+.flex-body__content {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding: 0;
+  margin: 10px;
+}
+
+.flex-body__nav {
+  flex: none;
+  position: absolute;
+  width: 100%;
+  top: 0;
+
+
+  &.expanded {
+    display: block;
+    @include media-breakpoint-up(md) {
+      display: flex;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    position: static;
+    display: flex;
+    flex: 0 0 10em;
+  }
+  @include media-breakpoint-up(lg) {
+    flex: 0 0 14em;
+  }
+}
+
+.flex-body__nav {
+  /* put the nav on the left */
+  order: -1;
+  background: $dark;
+}
