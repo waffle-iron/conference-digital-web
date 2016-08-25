@@ -1,12 +1,8 @@
 $images-dir: '/images/';
+@import "bootstrap-flex";
 @import "colours";
-@import "side-nav";
+@import "nav";
+@import "header";
 @import "flex";
 
-header {
-  flex: none;
-  display: block;
-  background: #222;
-  color: $burnedOrange;
-  padding: 5px 20px;
-}
+

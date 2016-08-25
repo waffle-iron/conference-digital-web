@@ -1,0 +1,53 @@
+@import 'colours';
+
+.side-nav {
+
+  margin: 0;
+  border: none;
+  padding: 0;
+  width: 100%;
+
+  li.active a {
+    border-top: 2px solid $burnedOrange;
+    border-bottom: 2px solid $burnedOrange;
+  }
+
+  a {
+    display: block;
+    padding: 20px 15px;
+  }
+
+  @include media-breakpoint-up(md) {
+    li {
+      display: block;
+    }
+  }
+}
+
+.nav-dark {
+
+  background-color: $dark;
+
+  li {
+
+    a {
+      color: $lightGrey;
+
+      &:hover,
+      &:focus {
+        outline: none;
+        color: #fff;
+        background-color: #000;
+        text-decoration: none;
+      }
+
+    }
+
+    &.active {
+      a {
+        color: #fff;
+        background: #000;
+      }
+    }
+  }
+}
