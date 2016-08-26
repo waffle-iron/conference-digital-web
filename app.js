@@ -14,6 +14,7 @@ const customSanitizers = require('./app/lib/sanitizers');
 
 const indexController = require('./app/controller/indexcontroller');
 const loginController = require('./app/controller/logincontroller');
+const locationsController = require('./app/controller/locationscontroller');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
@@ -44,6 +45,7 @@ nunjucks.ready((nj) => {
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/bootstrap/dist`));
+app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
 
 var sess = {
   secret: 'somethingsecret',
@@ -68,5 +70,10 @@ app.get('/', indexController.get);
 app.get('/login', loginController.get);
 app.post('/login', loginController.post);
 app.get('/logout', loginController.logout);
+app.get('/error', (req, res) => {
+  res.render('error');
+});
+
+app.use('/locations', locationsController.router);
 
 app.listen(config.port);

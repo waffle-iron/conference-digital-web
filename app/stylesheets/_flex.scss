@@ -1,6 +1,15 @@
 @import "colours";
 @import "mixins/breakpoints";
 
+body, html {
+  height: 100%;
+}
+
+body.flex-layout {
+  min-height: 100vh;
+  display: flex;
+}
+
 .flex-layout {
   display: flex;
   flex-direction: column;
@@ -32,7 +41,6 @@
   position: absolute;
   width: 100%;
   top: 0;
-
 
   &.expanded {
     display: block;

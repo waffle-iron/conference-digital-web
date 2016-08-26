@@ -44,7 +44,9 @@ function post(req, res) {
       res.redirect('/');
     })
     .catch((error) => {
+      console.log('Error logging in:', error.error);
       req.error = error.error;
+      res.redirect('/error');
     });
 
 }

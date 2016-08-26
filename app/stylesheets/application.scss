@@ -1,9 +1,19 @@
 $images-dir: '/images/';
+
+@-ms-viewport {
+  width: device-width;
+}
+
+@viewport {
+  width: device-width;
+}
+
 @import "bootstrap-flex";
+@import "font-awesome";
+
 @import "colours";
 @import "nav";
 @import "header";
 @import "flex";
 @import "login";
-
-
+@import "tables";
