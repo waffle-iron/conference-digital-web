@@ -6,13 +6,14 @@ const app = express();
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const nunjucks = require('express-nunjucks');
-
+const session = require('express-session');
 const config = require('./config');
 const filters = require('./app/lib/nunjuckfilters');
 const customValidators = require('./app/lib/validators');
 const customSanitizers = require('./app/lib/sanitizers');
 
 const indexController = require('./app/controller/indexcontroller');
+const loginController = require('./app/controller/logincontroller');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
@@ -39,14 +40,33 @@ nunjucks.ready((nj) => {
   });
 });
 
-// Insert usefull variables into response for all controllers
-app.use(require(`${__dirname}/app/middleware/locals`));
 
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/bootstrap/dist`));
 
+var sess = {
+  secret: 'somethingsecret',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true
+};
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1); // trust first proxy
+  sess.cookie.secure = true; // serve secure cookies
+}
+
+app.use(session(sess));
+app.use(require(`${__dirname}/app/middleware/auth`));
+
+// Insert usefull variables into response for all controllers
+app.use(require(`${__dirname}/app/middleware/locals`));
 
 app.get('/', indexController.get);
+
+app.get('/login', loginController.get);
+app.post('/login', loginController.post);
+app.get('/logout', loginController.logout);
 
 app.listen(config.port);
