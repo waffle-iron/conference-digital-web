@@ -1,0 +1,45 @@
+{% extends "../layouts/layout.html" %}
+
+{% block main %}
+
+<div class="container">
+  <div class="row">
+    <h1>
+      Locations
+      <a href="/locations/add" class="btn btn-primary btn-sm">Add location</a>
+    </h1>
+  </div>
+
+  <div class="row">
+    <table class="table record-list">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Town</th>
+        <th class="hidden-sm-down">Postcode</th>
+        <th class="hidden-md-down">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for location in locations %}
+        <tr>
+          <td>
+            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.title }}</a>
+          </td>
+          <td>
+            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.address_town }}</a>
+          </td>
+          <td class="hidden-sm-down">
+            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.zipcode }}</a>
+          </td>
+          <td class="hidden-md-down">
+            <a class="btn btn-sm btn-secondary" href="/locations/{{ location.id }}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="/location/delete/{{ location.id }}">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

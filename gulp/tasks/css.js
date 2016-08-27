@@ -6,7 +6,8 @@ const autoprefixer = require('gulp-autoprefixer');
 const paths = require('../paths');
 
 const SASS_PATHS = [
-  `${paths.node_modules}/bootstrap/scss`
+  `${paths.node_modules}/bootstrap/scss`,
+  `${paths.node_modules}/font-awesome/scss`
 ];
 
 function buildDevelopmentStyles() {
