@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const nunjucks = require('express-nunjucks');
 const session = require('express-session');
+const flash = require('express-flash');
+
+
 const config = require('./config');
 const filters = require('./app/lib/nunjuckfilters');
 const customValidators = require('./app/lib/validators');
@@ -18,7 +21,7 @@ const locationsController = require('./app/controller/locationscontroller');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
-
+app.use(flash());
 app.use(compression());
 
 let nunjucksConfig = {
@@ -61,6 +64,10 @@ if (app.get('env') === 'production') {
 
 app.use(session(sess));
 app.use(require(`${__dirname}/app/middleware/auth`));
+
+
+
+
 
 // Insert usefull variables into response for all controllers
 app.use(require(`${__dirname}/app/middleware/locals`));

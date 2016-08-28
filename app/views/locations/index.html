@@ -3,12 +3,21 @@
 {% block main %}
 
 <div class="container">
+
+  {% if messages.info %}
   <div class="row">
-    <h1>
+    <div class="alert alert-info col-sm-12" role="alert">
+      {{ messages.info }}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <h1 class="display-4 heading">
       Locations
       <a href="/locations/add" class="btn btn-primary btn-sm">Add location</a>
     </h1>
-    <p class="lead">
+    <p class="lead hidden-sm-down">
       Locations are a place that a speech or a training course takes place. If a conference is simply a speech then the location is where that happens.
       If a conference has multiple workshops or classes in different rooms then you should have a location for each one of the 'cases'
     </p>
@@ -38,7 +47,28 @@
           </td>
           <td class="hidden-md-down">
             <a class="btn btn-sm btn-secondary" href="/locations/{{ location.id }}">Edit</a>
-            <a class="btn btn-sm btn-danger" href="/location/delete/{{ location.id }}">Delete</a>
+            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-{{ location.id }}-modal">Delete</button>
+
+            <div id="delete-{{ location.id }}-modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Delete location</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you really really really sure you want to delete {{ location.title }}?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a href="/locations/{{ location.id }}/remove" class="btn btn-danger">Delete</a>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
           </td>
         </tr>
       {% endfor %}
