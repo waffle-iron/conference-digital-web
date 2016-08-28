@@ -29,6 +29,7 @@
     "eslint": "^2.7.0",
     "eslint-plugin-react": "^5.1.1",
     "express": "^4.13.4",
+    "express-flash": "0.0.2",
     "express-nunjucks": "^1.0.0",
     "express-session": "^1.14.1",
     "express-validator": "^2.20.5",

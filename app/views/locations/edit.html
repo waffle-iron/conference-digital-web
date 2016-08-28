@@ -2,9 +2,116 @@
 
 {% block main %}
 
+  {{ errors | log | safe }}
+
   <a href="/locations">< Back to locations</a>
-  <h1>{{ Location.title }}</h1>
+  {% if errors %}
+    <ul class="alert alert-danger" role="alert">
+      {% for name, item in errors %}
+      <li class="list-unstyled"><a href="#{{ name }}" class="alert-link">{{ labels[name] }}</a> - {{ item }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
 
+  <h1 class="display-4 heading">Location</h1>
+  <p class="lead hidden-sm-down">
+    Locations are a place that a speech or a training course takes place. If a conference
+    is simply a speech then the location is where that happens. If a conference has
+    multiple workshops or classes in different rooms then you should have a location for
+    each one of the 'cases'</p>
 
+  <form class="padded-form form-adaptive" method="post">
+
+    <div class="form-group{% if errors.title %} has-danger{% endif %}">
+      <label for="title">{{ labels['title'] }}</label>
+      <input name="title" class="form-control" type="text" value="{{ location.title }}" id="title">
+      {% if errors.title %}
+        <div class="form-control-feedback">{{ error.title }}</div>
+      {% endif %}
+      <small id="location-title-help" class="form-text text-muted">Give this location a name so it's easy to recognise when selecting it from a list</small>
+    </div>
+
+    <div class="form-group{% if errors.description %} has-danger{% endif %}">
+      <label for="description">{{ labels['description'] }}</label>
+      <textarea name="description" class="form-control" id="description" rows="3">{{ location.description }}</textarea>
+      {% if errors.description %}
+        <div class="form-control-feedback">{{ error.description }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group{% if errors.address_1 or errors.address_2 %} has-danger{% endif %}">
+      <label for="address_1">{{ labels['address_1'] }}</label>
+      <input name="address_1" class="form-control address-line-1" type="text" value="{{ location.address_1 }}" id="address_1">
+      <label for="address_2" class="sr-only">{{ labels['address_2'] }}</label>
+      <input name="address_2" class="form-control address-line-2" type="text" value="{{ location.address_2 }}" id="address_2">
+      {% if errors.address_1 %}
+        <div class="form-control-feedback">{{ errors.address_1 }}</div>
+      {% endif %}
+      {% if errors.address_2 %}
+        <div class="form-control-feedback">{{ errors.address_2 }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group{% if errors.address_town %} has-danger{% endif %}">
+      <label for="address_town">{{ labels['address_town'] }}</label>
+      <input name="address_town" class="form-control" type="text" value="{{ location.address_town }}" id="address_town">
+      {% if errors.address_town %}
+        <div class="form-control-feedback">{{ errors.address_town }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group{% if errors.address_county %} has-danger{% endif %}">
+      <label for="address_county">{{ labels['address_county'] }}</label>
+      <input name="address_county" class="form-control" type="text" value="{{ location.address_county }}" id="address_county">
+      {% if errors.address_county %}
+        <div class="form-control-feedback">{{ errors.address_county }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group{% if errors.address_country %} has-danger{% endif %}">
+      <label for="address_country">{{ labels['address_country'] }}</label>
+      <input name="address_country" class="form-control" type="text" value="{{ location.address_country }}" id="address_country">
+      {% if errors.address_country %}
+        <div class="form-control-feedback">{{ errors.address_country }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group short{% if errors.zipcode %} has-danger{% endif %}">
+      <label for="zipcode">{{ labels['zipcode'] }}</label>
+      <input name="zipcode" class="form-control" type="text" value="{{ location.zipcode }}" id="zipcode">
+      {% if errors.zipcode %}
+        <div class="form-control-feedback">{{ errors.zipcode }}</div>
+      {% endif %}
+    </div>
+
+    <div class="button-bar">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a class="btn btn-link" href="/locations">Cancel</a>
+      {% if location.id %}
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bd-example-modal-sm">Delete</button>
+        <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Delete location</h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you really really really sure you want to delete this location?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a href="/locations/{{ location.id }}/remove" class="btn btn-danger">Delete</a>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      {% endif %}
+    </div>
+
+    <input type="hidden" name="id" value="{{ location.id }}"/>
+  </form>
 
 {% endblock %}
