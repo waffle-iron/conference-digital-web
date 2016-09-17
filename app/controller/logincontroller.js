@@ -34,6 +34,7 @@ function get(req, res) {
 function post(req, res) {
 
   if (!req.body.username || !req.body.password) {
+    req.flash('error', 'Invalid user id or password');
     res.redirect('/login');
     return;
   }
@@ -44,7 +45,12 @@ function post(req, res) {
       res.redirect('/');
     })
     .catch((error) => {
-      console.log('Error logging in:', error.error);
+      if (error.response.statusCode === 401) {
+        req.flash('error', 'Invalid user id or password');
+        res.redirect('/');
+        return;
+      }
+
       req.error = error.error;
       res.redirect('/error');
     });
