@@ -48,6 +48,8 @@ nunjucks.ready((nj) => {
 app.use(express.static(`${__dirname}/app/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/bootstrap/dist`));
+app.use('/js', express.static(`${__dirname}/node_modules/jquery/dist`));
+app.use(express.static(`${__dirname}/node_modules/tether/dist`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
 
 var sess = {
