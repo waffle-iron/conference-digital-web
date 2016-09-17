@@ -7,6 +7,11 @@
   <div class="container">
     <form class="form-signin" method="post">
       <h1 class="form-signin-heading">Please sign in</h1>
+      {% if messages.error %}
+        <div class="alert alert-error" role="alert">
+          {{ messages.error }}
+        </div>
+      {% endif %}
       <label for="input-user" class="sr-only">User ID</label>
       <input type="text" name="username" id="input-user" class="form-control" placeholder="User ID" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <label for="inputPassword" class="sr-only">Password</label>
