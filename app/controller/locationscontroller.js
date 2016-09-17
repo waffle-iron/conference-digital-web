@@ -8,12 +8,12 @@ const rp = require('request-promise');
 const labels = {
   title: 'Location name',
   description: 'Description',
-  address_1: "Address",
-  address_2: "Address 2",
-  address_town: "Town",
-  address_county: "County",
-  address_country: "Country",
-  zipcode: "Postcode/Zipcode "
+  address_1: 'Address',
+  address_2: 'Address 2',
+  address_town: 'Town',
+  address_county: 'County',
+  address_country: 'Country',
+  zipcode: 'Postcode/Zipcode '
 };
 
 function index(req, res) {
@@ -36,7 +36,7 @@ function index(req, res) {
       });
     })
     .catch((error) => {
-      res.render('error' , { error: error.error });
+      res.render('error', { error: error.error });
     });
 
 }
@@ -73,7 +73,7 @@ function update(req, res) {
       res.redirect('/locations');
     })
     .catch((error) => {
-      req.errors =  error.response.body;
+      req.errors = error.response.body;
       edit(req, res);
     });
 
@@ -119,7 +119,7 @@ function edit(req, res) {
       });
     })
     .catch((error) => {
-      res.render('error' , { error: error.error });
+      res.render('error', { error: error.error });
     });
 
 }
@@ -145,7 +145,7 @@ function remove(req, res) {
       res.redirect('/locations');
     })
     .catch((error) => {
-      res.render('error' , { error: error.error });
+      res.render('error', { error: error.error });
     });
 
 }
