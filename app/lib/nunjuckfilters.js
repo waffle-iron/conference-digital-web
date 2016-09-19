@@ -16,8 +16,8 @@ var filter = {};
  * @return {String}     a javascript date string
  */
 filter.newDate = function date(d) {
-  var dateArr = d.split('/');
-  return dateArr.length === 3 ? new Date(dateArr[2], parseInt(dateArr[1]) - 1, dateArr[0]) : NaN;
+  var dateArr = d.split('-');
+  return dateArr.length === 3 ? new Date(dateArr[0], parseInt(dateArr[1]) - 1, dateArr[2]) : NaN;
 };
 
 /**
@@ -29,7 +29,14 @@ filter.newDate = function date(d) {
  * @return {string} date string as per the current gov.uk standard 09/12/1981 -> 09 December 1981
  */
 filter.formatDate = function(d, f) {
-  const formatted = moment(filter.newDate(d)).locale('en-gb').format(f ? f : 'LL');
+
+  let formatted;
+
+  if (d && d.length > 0 && d.length < 11) {
+    formatted = moment(newDate(d)).locale('en-gb').format(f ? f : 'LL');
+  } else {
+    formatted = moment(d, moment.ISO_8601).format(f ? f : 'DD MMMM YYYY, h:mm:ss a');
+  }
 
   if (formatted === 'Invalid date') {
     return '';
