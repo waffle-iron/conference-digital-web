@@ -35,7 +35,7 @@
             <li class="{%  if not section %}active{%  endif %}">
               <a href="/">Overview</a>
             </li>
-            <li>
+            <li class="{% if section == 'conferences' %}active{% endif %}">
               <a href="/conferences">Conferences</a>
             </li>
             <li class="{% if section == 'locations' %}active{% endif %}">

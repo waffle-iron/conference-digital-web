@@ -26,7 +26,7 @@
       <label for="title">{{ labels['title'] }}</label>
       <input name="title" class="form-control" type="text" value="{{ location.title }}" id="title">
       {% if errors.title %}
-        <div class="form-control-feedback">{{ error.title }}</div>
+        <div class="form-control-feedback">{{ errors.title }}</div>
       {% endif %}
       <small id="location-title-help" class="form-text text-muted">Give this location a name so it's easy to recognise when selecting it from a list</small>
     </div>
@@ -35,7 +35,7 @@
       <label for="description">{{ labels['description'] }}</label>
       <textarea name="description" class="form-control" id="description" rows="3">{{ location.description }}</textarea>
       {% if errors.description %}
-        <div class="form-control-feedback">{{ error.description }}</div>
+        <div class="form-control-feedback">{{ errors.description }}</div>
       {% endif %}
     </div>
 

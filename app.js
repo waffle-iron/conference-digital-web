@@ -18,6 +18,8 @@ const customSanitizers = require('./app/lib/sanitizers');
 const indexController = require('./app/controller/indexcontroller');
 const loginController = require('./app/controller/logincontroller');
 const locationsController = require('./app/controller/locationscontroller');
+const conferencesController = require('./app/controller/conferencescontroller');
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
@@ -84,5 +86,6 @@ app.get('/error', (req, res) => {
 });
 
 app.use('/locations', locationsController.router);
+app.use('/conferences', conferencesController.router);
 
 app.listen(config.port);

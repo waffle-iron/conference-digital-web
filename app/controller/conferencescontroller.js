@@ -6,21 +6,19 @@ const config = require('../../config');
 const rp = require('request-promise');
 
 const labels = {
-  title: 'Location name',
+  title: 'Conference name',
   description: 'Description',
-  address_1: 'Address',
-  address_2: 'Address 2',
-  address_town: 'Town',
-  address_county: 'County',
-  address_country: 'Country',
-  zipcode: 'Postcode/Zipcode '
+  organiser: 'Organiser',
+  location: 'Location',
+  start_datetime: 'Start date/time',
+  end_datetime: 'End date/time'
 };
 
 function index(req, res) {
 
   const options = {
     method: 'GET',
-    url: `${config.api.baseUrl}/locations/`,
+    url: `${config.api.baseUrl}/conferences/`,
     headers: {
       'Authorization': `Bearer ${req.session.token}`,
       'content-type': 'application/json'
@@ -30,9 +28,9 @@ function index(req, res) {
 
   rp(options)
     .then((data) => {
-      res.render('locations/index', {
-        section: 'locations',
-        locations: data.results
+      res.render('conferences/index', {
+        section: 'conferences',
+        conferences: data.results
       });
     })
     .catch((error) => {
@@ -44,33 +42,33 @@ function index(req, res) {
 function update(req, res) {
 
   // get the form data
-  let location = req.body;
+  let conference = req.body;
   let options = {
     headers: {
       'Authorization': `Bearer ${req.session.token}`,
       'content-type': 'application/json'
     },
     json: true,
-    body: location
+    body: conference
   };
 
-  if (location.id && location.id.length > 0) {
+  if (conference.id && conference.id.length > 0) {
     options.method = 'PUT';
-    options.url = `${config.api.baseUrl}/locations/${location.id}/`;
+    options.url = `${config.api.baseUrl}/conferences/${conference.id}/`;
   } else {
     options.method = 'POST';
-    options.url = `${config.api.baseUrl}/locations/`;
+    options.url = `${config.api.baseUrl}/conferences/`;
   }
 
   rp(options)
     .then(() => {
-      if (location.id && location.id.length > 0) {
-        req.flash('info', `Updated ${location.title}`);
+      if (conference.id && conference.id.length > 0) {
+        req.flash('info', `Updated ${conference.title}`);
       } else {
-        req.flash('info', `Added ${location.title}`);
+        req.flash('info', `Added ${conference.title}`);
       }
 
-      res.redirect('/locations');
+      res.redirect('/conferences');
     })
     .catch((error) => {
       req.errors = error.response.body;
@@ -84,17 +82,17 @@ function edit(req, res) {
   res.locals.labels = labels;
 
   if (req.body && Object.keys(req.body).length > 0) {
-    res.render('locations/edit', {
-      section: 'locations',
-      location: req.body,
+    res.render('conferences/edit', {
+      section: 'conferences',
+      conference: req.body,
       errors: req.errors
     });
     return;
   }
 
   if (!req.params.id) {
-    res.render('locations/edit', {
-      section: 'locations',
+    res.render('conferences/edit', {
+      section: 'conferences',
       errors: req.errors
     });
     return;
@@ -102,7 +100,7 @@ function edit(req, res) {
 
   const options = {
     method: 'GET',
-    url: `${config.api.baseUrl}/locations/${req.params.id}/`,
+    url: `${config.api.baseUrl}/conferences/${req.params.id}/`,
     headers: {
       'Authorization': `Bearer ${req.session.token}`,
       'content-type': 'application/json'
@@ -112,9 +110,9 @@ function edit(req, res) {
 
   rp(options)
     .then((data) => {
-      res.render('locations/edit', {
-        section: 'locations',
-        location: data,
+      res.render('conferences/edit', {
+        section: 'conferences',
+        conference: data,
         errors: req.errors
       });
     })
@@ -126,12 +124,12 @@ function edit(req, res) {
 
 function remove(req, res) {
   if (!req.params.id) {
-    res.redirect('/locations');
+    res.redirect('/conferences');
   }
 
   const options = {
     method: 'DELETE',
-    url: `${config.api.baseUrl}/locations/${req.params.id}/`,
+    url: `${config.api.baseUrl}/conferences/${req.params.id}/`,
     headers: {
       'Authorization': `Bearer ${req.session.token}`,
       'content-type': 'application/json'
@@ -141,8 +139,8 @@ function remove(req, res) {
 
   rp(options)
     .then(() => {
-      req.flash('info', 'Location deleted');
-      res.redirect('/locations');
+      req.flash('info', 'Conference deleted');
+      res.redirect('/conferences');
     })
     .catch((error) => {
       res.render('error', { error: error.error });
