@@ -5,7 +5,7 @@ const expressValidator = require('express-validator');
 const app = express();
 const bodyParser = require('body-parser');
 const compression = require('compression');
-const nunjucks = require('express-nunjucks');
+const nunjucks = require('nunjucks');
 const session = require('express-session');
 const flash = require('express-flash');
 
@@ -20,30 +20,22 @@ const loginController = require('./app/controller/logincontroller');
 const locationsController = require('./app/controller/locationscontroller');
 const conferencesController = require('./app/controller/conferencescontroller');
 
+const isDev = app.get('env') === 'development';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator({ customValidators, customSanitizers }));
 app.use(flash());
 app.use(compression());
 
-let nunjucksConfig = {
-  autoescape: true
-};
-
-if (config.env !== 'production') {
-  nunjucksConfig.noCache = true;
-}
-
 app.set('view engine', 'html');
-app.set('views', [`${__dirname}/app/views`]);
+const nunenv = nunjucks.configure(`${__dirname}/app/views`, {
+  autoescape: true,
+  express: app,
+  watch: isDev
+});
 
-nunjucks.setup(nunjucksConfig, app);
-
-// Add extra filters to nunjucks
-nunjucks.ready((nj) => {
-  Object.keys(filters).forEach((filterName) => {
-    nj.addFilter(filterName, filters[filterName]);
-  });
+Object.keys(filters).forEach((filterName) => {
+  nunenv.addFilter(filterName, filters[filterName]);
 });
 
 
