@@ -1,38 +1,30 @@
 'use strict';
 
-const rp = require('request-promise');
+const axios = require('axios');
+const querystring = require('querystring');
 const config = require('../../config');
 
-function auth(username, password) {
-  var options = {
-    method: 'POST',
-    url: config.api.authUrl,
+const AUTH_TOKEN = `Basic ${new Buffer(config.api.clientId + ':' + config.api.clientSecret).toString('base64')}`;
 
-    headers:
-    {
-      'cache-control': 'no-cache',
-      authorization: `Basic ${new Buffer(config.api.clientId + ':' + config.api.clientSecret).toString('base64')}`,
-      'content-type': 'multipart/form-data; boundary=---011000010111000001101001'
-    },
-    formData:
-    {
+function auth(username, password) {
+  return axios.post(config.api.authUrl,
+    querystring.stringify({
       username: username,
       password: password,
       grant_type: 'password'
-    },
-    json: true
-  };
-
-  return rp(options);
+    }),{
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": AUTH_TOKEN
+      }
+    });
 }
-
 
 function get(req, res) {
   res.render('login');
 }
 
 function post(req, res) {
-
   if (!req.body.username || !req.body.password) {
     req.flash('error', 'Invalid user id or password');
     res.redirect('/login');
@@ -40,7 +32,7 @@ function post(req, res) {
   }
 
   auth(req.body.username, req.body.password)
-    .then((data) => {
+    .then(({data}) => {
       req.session.token = data.access_token;
       res.redirect('/');
     })
@@ -54,7 +46,6 @@ function post(req, res) {
       req.error = error.error;
       res.redirect('/error');
     });
-
 }
 
 function logout(req, res) {

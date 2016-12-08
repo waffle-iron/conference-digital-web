@@ -8,14 +8,7 @@ body, html {
 body.flex-layout {
   min-height: 100vh;
   display: flex;
-}
-
-.flex-layout {
-  display: flex;
   flex-direction: column;
-  @include media-breakpoint-up(md) {
-    min-height: 100vh;
-  }
 }
 
 .flex-body {
@@ -34,10 +27,10 @@ body.flex-layout {
   flex: 1;
   margin: 1rem 0;
   @include media-breakpoint-up(md) {
-    margin: 1rem;
+    margin: 1rem 0;
   }
   @include media-breakpoint-up(lg) {
-    margin: 2.5rem 4rem;
+    margin: 2.5rem 0;
   }
 }
 
@@ -46,6 +39,9 @@ body.flex-layout {
   position: absolute;
   width: 100%;
   top: 0;
+  /* put the nav on the left */
+  order: -1;
+  background: $dark;
 
   &.expanded {
     display: block;
@@ -62,10 +58,4 @@ body.flex-layout {
   @include media-breakpoint-up(lg) {
     flex: 0 0 14em;
   }
-}
-
-.flex-body__nav {
-  /* put the nav on the left */
-  order: -1;
-  background: $dark;
 }

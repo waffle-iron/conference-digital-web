@@ -1,10 +1,10 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router();
+const axios = require('axios');
 const config = require('../../config');
-const rp = require('request-promise');
 
+const router = express.Router();
 const labels = {
   title: 'Location name',
   description: 'Description',
@@ -17,62 +17,48 @@ const labels = {
 };
 
 function index(req, res) {
-
-  const options = {
-    method: 'GET',
-    url: `${config.api.baseUrl}/locations/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
-    .then((data) => {
+  axios.get(`${config.api.baseUrl}/locations/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
+    .then(({data}) => {
       res.render('locations/index', {
         section: 'locations',
         locations: data.results
       });
-    })
-    .catch((error) => {
+    }, (error) => {
       res.render('error', { error: error.error });
     });
-
 }
 
 function update(req, res) {
-
   // get the form data
-  let location = req.body;
-  let options = {
+  const location = req.body;
+
+  const options = {
     headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
+      'Authorization': `Bearer ${req.session.token}`
     },
-    json: true,
-    body: location
+    data: location
   };
 
   if (location.id && location.id.length > 0) {
-    options.method = 'PUT';
+    options.method = 'put';
     options.url = `${config.api.baseUrl}/locations/${location.id}/`;
   } else {
-    options.method = 'POST';
+    options.method = 'post';
     options.url = `${config.api.baseUrl}/locations/`;
   }
 
-  rp(options)
+  axios(options)
     .then(() => {
       if (location.id && location.id.length > 0) {
         req.flash('info', `Updated ${location.title}`);
       } else {
         req.flash('info', `Added ${location.title}`);
       }
-
       res.redirect('/locations');
-    })
-    .catch((error) => {
+    }, (error) => {
       req.errors = error.response.body;
       edit(req, res);
     });
@@ -80,9 +66,7 @@ function update(req, res) {
 }
 
 function edit(req, res) {
-
   res.locals.labels = labels;
-
   if (req.body && Object.keys(req.body).length > 0) {
     res.render('locations/edit', {
       section: 'locations',
@@ -91,7 +75,6 @@ function edit(req, res) {
     });
     return;
   }
-
   if (!req.params.id) {
     res.render('locations/edit', {
       section: 'locations',
@@ -100,18 +83,11 @@ function edit(req, res) {
     return;
   }
 
-  const options = {
-    method: 'GET',
-    url: `${config.api.baseUrl}/locations/${req.params.id}/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
-    .then((data) => {
+  axios.get(`${config.api.baseUrl}/locations/${req.params.id}/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
+    .then(({data}) => {
       res.render('locations/edit', {
         section: 'locations',
         location: data,
@@ -129,25 +105,16 @@ function remove(req, res) {
     res.redirect('/locations');
   }
 
-  const options = {
-    method: 'DELETE',
-    url: `${config.api.baseUrl}/locations/${req.params.id}/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
+  axios.delete(`${config.api.baseUrl}/locations/${req.params.id}/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
     .then(() => {
       req.flash('info', 'Location deleted');
       res.redirect('/locations');
-    })
-    .catch((error) => {
+    }, (error) => {
       res.render('error', { error: error.error });
     });
-
 }
 
 
