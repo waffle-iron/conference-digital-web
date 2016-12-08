@@ -15,12 +15,14 @@ var filter = {};
  * @param  {String} d   A date string (must be) formatted (d)d/(m)m/yyy - in parens means optional
  * @return {String}     a javascript date string
  */
-filter.newDate = function date(d) {
+function newDate(d) {
   var dateArr = d.split('-');
   return dateArr.length === 3 ? new Date(dateArr[0], parseInt(dateArr[1]) - 1, dateArr[2]) : NaN;
-};
+}
 
-/**
+filter.newDate = newDate;
+
+  /**
  * returns a standard gov.uk date from a string using momentjs
  * moment documentation: http://momentjs.com/docs/
  * @method function

@@ -11,14 +11,14 @@ const flash = require('express-flash');
 
 
 const config = require('./config');
-const filters = require('./app/lib/nunjuckfilters');
-const customValidators = require('./app/lib/validators');
-const customSanitizers = require('./app/lib/sanitizers');
+const filters = require('./src/lib/nunjuckfilters');
+const customValidators = require('./src/lib/validators');
+const customSanitizers = require('./src/lib/sanitizers');
 
-const indexController = require('./app/controller/indexcontroller');
-const loginController = require('./app/controller/logincontroller');
-const locationsController = require('./app/controller/locationscontroller');
-const conferencesController = require('./app/controller/conferencescontroller');
+const indexController = require('./src/controller/indexcontroller');
+const loginController = require('./src/controller/logincontroller');
+const locationsController = require('./src/controller/locationscontroller');
+const conferencesController = require('./src/controller/conferencescontroller');
 
 const isDev = app.get('env') === 'development';
 
@@ -28,7 +28,7 @@ app.use(flash());
 app.use(compression());
 
 app.set('view engine', 'html');
-const nunenv = nunjucks.configure(`${__dirname}/app/views`, {
+const nunenv = nunjucks.configure(`${__dirname}/src/views`, {
   autoescape: true,
   express: app,
   watch: isDev
@@ -39,14 +39,14 @@ Object.keys(filters).forEach((filterName) => {
 });
 
 
-app.use(express.static(`${__dirname}/app/public`));
+app.use(express.static(`${__dirname}/src/public`));
 app.use(express.static(`${__dirname}/build`));
 app.use(express.static(`${__dirname}/node_modules/bootstrap/dist`));
 app.use('/js', express.static(`${__dirname}/node_modules/jquery/dist`));
 app.use(express.static(`${__dirname}/node_modules/tether/dist`));
 app.use('/fonts', express.static(`${__dirname}/node_modules/font-awesome/fonts`));
 
-var sess = {
+let sess = {
   secret: 'somethingsecret',
   cookie: {},
   resave: false,
@@ -59,14 +59,14 @@ if (app.get('env') === 'production') {
 }
 
 app.use(session(sess));
-app.use(require(`${__dirname}/app/middleware/auth`));
+app.use(require(`${__dirname}/src/middleware/auth`));
 
 
 
 
 
 // Insert usefull variables into response for all controllers
-app.use(require(`${__dirname}/app/middleware/locals`));
+app.use(require(`${__dirname}/src/middleware/locals`));
 
 app.get('/', indexController.get);
 

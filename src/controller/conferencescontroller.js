@@ -1,10 +1,10 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router();
+const axios = require('axios');
 const config = require('../../config');
-const rp = require('request-promise');
 
+const router = express.Router();
 const labels = {
   title: 'Conference name',
   description: 'Description',
@@ -15,32 +15,21 @@ const labels = {
 };
 
 function index(req, res) {
-
-  const options = {
-    method: 'GET',
-    url: `${config.api.baseUrl}/conferences/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
-    .then((data) => {
+  axios.get(`${config.api.baseUrl}/conferences/${req.params.id}/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
+    .then(({data}) => {
       res.render('conferences/index', {
         section: 'conferences',
         conferences: data.results
       });
-    })
-    .catch((error) => {
+    }, (error) => {
       res.render('error', { error: error.error });
     });
-
 }
 
 function update(req, res) {
-
   // get the form data
   let conference = req.body;
   let options = {
@@ -48,19 +37,18 @@ function update(req, res) {
       'Authorization': `Bearer ${req.session.token}`,
       'content-type': 'application/json'
     },
-    json: true,
-    body: conference
+    data: conference
   };
 
   if (conference.id && conference.id.length > 0) {
-    options.method = 'PUT';
+    options.method = 'put';
     options.url = `${config.api.baseUrl}/conferences/${conference.id}/`;
   } else {
-    options.method = 'POST';
+    options.method = 'post';
     options.url = `${config.api.baseUrl}/conferences/`;
   }
 
-  rp(options)
+  axios(options)
     .then(() => {
       if (conference.id && conference.id.length > 0) {
         req.flash('info', `Updated ${conference.title}`);
@@ -69,18 +57,14 @@ function update(req, res) {
       }
 
       res.redirect('/conferences');
-    })
-    .catch((error) => {
+    }, (error) => {
       req.errors = error.response.body;
       edit(req, res);
     });
-
 }
 
 function edit(req, res) {
-
   res.locals.labels = labels;
-
   if (req.body && Object.keys(req.body).length > 0) {
     res.render('conferences/edit', {
       section: 'conferences',
@@ -89,7 +73,6 @@ function edit(req, res) {
     });
     return;
   }
-
   if (!req.params.id) {
     res.render('conferences/edit', {
       section: 'conferences',
@@ -98,25 +81,17 @@ function edit(req, res) {
     return;
   }
 
-  const options = {
-    method: 'GET',
-    url: `${config.api.baseUrl}/conferences/${req.params.id}/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
-    .then((data) => {
+  axios.get(`${config.api.baseUrl}/conferences/${req.params.id}/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
+    .then(({data}) => {
       res.render('conferences/edit', {
         section: 'conferences',
         conference: data,
         errors: req.errors
       });
-    })
-    .catch((error) => {
+    }, (error) => {
       res.render('error', { error: error.error });
     });
 
@@ -127,22 +102,14 @@ function remove(req, res) {
     res.redirect('/conferences');
   }
 
-  const options = {
-    method: 'DELETE',
-    url: `${config.api.baseUrl}/conferences/${req.params.id}/`,
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    json: true
-  };
-
-  rp(options)
+  axios.delete(`${config.api.baseUrl}/conferences/${req.params.id}/`,
+    {
+      headers: {'Authorization': `Bearer ${req.session.token}`}
+    })
     .then(() => {
       req.flash('info', 'Conference deleted');
       res.redirect('/conferences');
-    })
-    .catch((error) => {
+    }, (error) => {
       res.render('error', { error: error.error });
     });
 
