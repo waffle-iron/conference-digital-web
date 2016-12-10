@@ -15,7 +15,7 @@ const labels = {
 };
 
 function index(req, res) {
-  axios.get(`${config.api.baseUrl}/conferences/${req.params.id}/`,
+  axios.get(`${config.api.baseUrl}/conferences/`,
     {
       headers: {'Authorization': `Bearer ${req.session.token}`}
     })
@@ -25,6 +25,7 @@ function index(req, res) {
         conferences: data.results
       });
     }, (error) => {
+      console.log(error);
       res.render('error', { error: error.error });
     });
 }
@@ -58,8 +59,13 @@ function update(req, res) {
 
       res.redirect('/conferences');
     }, (error) => {
-      req.errors = error.response.body;
-      edit(req, res);
+      console.log(error);
+      if (error.data) {
+        req.errors = error.data;
+        return edit(req, res);
+      } else {
+        return res.render('error');
+      }
     });
 }
 
@@ -92,7 +98,8 @@ function edit(req, res) {
         errors: req.errors
       });
     }, (error) => {
-      res.render('error', { error: error.error });
+      console.log(error);
+      res.render('error');
     });
 
 }
@@ -110,7 +117,8 @@ function remove(req, res) {
       req.flash('info', 'Conference deleted');
       res.redirect('/conferences');
     }, (error) => {
-      res.render('error', { error: error.error });
+      console.log(error);
+      res.render('error');
     });
 
 }

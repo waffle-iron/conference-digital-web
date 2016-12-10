@@ -27,7 +27,8 @@ function index(req, res) {
         locations: data.results
       });
     }, (error) => {
-      res.render('error', { error: error.error });
+      console.log(error);
+      res.render('error');
     });
 }
 
@@ -59,8 +60,13 @@ function update(req, res) {
       }
       res.redirect('/locations');
     }, (error) => {
-      req.errors = error.response.body;
-      edit(req, res);
+      console.log(error);
+      if (error.data) {
+        req.errors = error.data;
+        return edit(req, res);
+      } else {
+        return res.render('error');
+      }
     });
 
 }
@@ -95,7 +101,8 @@ function edit(req, res) {
       });
     })
     .catch((error) => {
-      res.render('error', { error: error.error });
+      console.log(error);
+      res.render('error');
     });
 
 }
@@ -113,7 +120,8 @@ function remove(req, res) {
       req.flash('info', 'Location deleted');
       res.redirect('/locations');
     }, (error) => {
-      res.render('error', { error: error.error });
+      console.log(error);
+      res.render('error');
     });
 }
 
