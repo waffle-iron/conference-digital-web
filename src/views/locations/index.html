@@ -15,7 +15,7 @@
   <div class="row">
     <h1 class="display-4 heading">
       Locations
-      <a href="/locations/add" class="btn btn-primary btn-sm">Add location</a>
+      <a href="/locations/new" class="btn btn-primary btn-sm">Add location</a>
     </h1>
     <p class="lead hidden-sm-down">
       Locations are a place that a speech or a training course takes place. If a conference is simply a speech then the location is where that happens.
@@ -37,16 +37,16 @@
       {% for location in locations %}
         <tr>
           <td>
-            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.title }}</a>
+            <a class="record-list__data-link" href="/locations/{{ location.id }}/edit">{{ location.title }}</a>
           </td>
           <td>
-            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.address_town }}</a>
+            <a class="record-list__data-link" href="/locations/{{ location.id }}/edit">{{ location.address_town }}</a>
           </td>
           <td class="hidden-sm-down">
-            <a class="record-list__data-link" href="/locations/{{ location.id }}">{{ location.zipcode }}</a>
+            <a class="record-list__data-link" href="/locations/{{ location.id }}/edit">{{ location.zipcode }}</a>
           </td>
           <td class="hidden-md-down">
-            <a class="btn btn-sm btn-secondary" href="/locations/{{ location.id }}">Edit</a>
+            <a class="btn btn-sm btn-secondary" href="/locations/{{ location.id }}/edit">Edit</a>
             <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-{{ location.id }}-modal">Delete</button>
 
             <div id="delete-{{ location.id }}-modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">

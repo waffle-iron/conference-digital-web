@@ -3,6 +3,7 @@
 const express = require('express');
 const axios = require('axios');
 const config = require('../../config');
+const locationRepository = require('../repository/locationrepository');
 
 const router = express.Router();
 const labels = {
@@ -17,41 +18,21 @@ const labels = {
 };
 
 function index(req, res) {
-  axios.get(`${config.api.baseUrl}/locations/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
-    .then(({data}) => {
+  locationRepository.getLocations(req.session.token)
+    .then((locations) => {
       res.render('locations/index', {
         section: 'locations',
-        locations: data.results
+        locations
       });
     }, (error) => {
-      console.log(error);
       res.render('error');
     });
 }
 
 function update(req, res) {
-  // get the form data
   const location = req.body;
 
-  const options = {
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`
-    },
-    data: location
-  };
-
-  if (location.id && location.id.length > 0) {
-    options.method = 'put';
-    options.url = `${config.api.baseUrl}/locations/${location.id}/`;
-  } else {
-    options.method = 'post';
-    options.url = `${config.api.baseUrl}/locations/`;
-  }
-
-  axios(options)
+  locationRepository.saveLocation(req.session.token, location)
     .then(() => {
       if (location.id && location.id.length > 0) {
         req.flash('info', `Updated ${location.title}`);
@@ -60,7 +41,6 @@ function update(req, res) {
       }
       res.redirect('/locations');
     }, (error) => {
-      console.log(error);
       if (error.data) {
         req.errors = error.data;
         return edit(req, res);
@@ -68,43 +48,34 @@ function update(req, res) {
         return res.render('error');
       }
     });
-
 }
 
 function edit(req, res) {
-  res.locals.labels = labels;
-  if (req.body && Object.keys(req.body).length > 0) {
+
+  function render(location) {
     res.render('locations/edit', {
       section: 'locations',
-      location: req.body,
-      errors: req.errors
+      location,
+      errors: req.errors,
+      labels
     });
-    return;
-  }
-  if (!req.params.id) {
-    res.render('locations/edit', {
-      section: 'locations',
-      errors: req.errors
-    });
-    return;
   }
 
-  axios.get(`${config.api.baseUrl}/locations/${req.params.id}/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
-    .then(({data}) => {
-      res.render('locations/edit', {
-        section: 'locations',
-        location: data,
-        errors: req.errors
+  // if called with a req body, then this is a re-edit with errors
+  // if we have an id then we are editing a location
+  // otherwise this is the first try to create a new location
+  if (req.body && req.body.length > 0) {
+    return render(req.body);
+  } else if (req.params.id) {
+    return locationRepository.getLocation(req.session.token, req.params.id)
+      .then((location) => {
+        render(location);
+      }, (error) => {
+        res.render('error');
       });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.render('error');
-    });
+  }
 
+  return render();
 }
 
 function remove(req, res) {
@@ -112,25 +83,19 @@ function remove(req, res) {
     res.redirect('/locations');
   }
 
-  axios.delete(`${config.api.baseUrl}/locations/${req.params.id}/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
+  locationRepository.deleteLocation(req.session.token, {id: req.params.id})
     .then(() => {
       req.flash('info', 'Location deleted');
       res.redirect('/locations');
     }, (error) => {
-      console.log(error);
       res.render('error');
     });
 }
 
-
+// http://guides.rubyonrails.org/routing.html
 router.get('/', index);
-router.get('/add', edit);
-router.post('/add', update);
-router.get('/:id', edit);
-router.post('/:id', update);
+router.get(['/new','/:id/edit'], edit);
+router.post(['/new','/:id/edit'], update);
 router.get('/:id/remove', remove);
 
 

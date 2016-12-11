@@ -3,6 +3,7 @@
 const express = require('express');
 const axios = require('axios');
 const config = require('../../config');
+const conferenceRepository = require('../repository/conferencerepository');
 
 const router = express.Router();
 const labels = {
@@ -15,51 +16,29 @@ const labels = {
 };
 
 function index(req, res) {
-  axios.get(`${config.api.baseUrl}/conferences/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
-    .then(({data}) => {
+  conferenceRepository.getConferences(req.session.token)
+    .then((conferences) => {
       res.render('conferences/index', {
         section: 'conferences',
-        conferences: data.results
+        conferences
       });
     }, (error) => {
-      console.log(error);
-      res.render('error', { error: error.error });
+      res.render('error');
     });
 }
 
 function update(req, res) {
-  // get the form data
-  let conference = req.body;
-  let options = {
-    headers: {
-      'Authorization': `Bearer ${req.session.token}`,
-      'content-type': 'application/json'
-    },
-    data: conference
-  };
+  const conference = req.body;
 
-  if (conference.id && conference.id.length > 0) {
-    options.method = 'put';
-    options.url = `${config.api.baseUrl}/conferences/${conference.id}/`;
-  } else {
-    options.method = 'post';
-    options.url = `${config.api.baseUrl}/conferences/`;
-  }
-
-  axios(options)
+  conferenceRepository.saveConference(req.session.token, conference)
     .then(() => {
       if (conference.id && conference.id.length > 0) {
         req.flash('info', `Updated ${conference.title}`);
       } else {
         req.flash('info', `Added ${conference.title}`);
       }
-
       res.redirect('/conferences');
     }, (error) => {
-      console.log(error);
       if (error.data) {
         req.errors = error.data;
         return edit(req, res);
@@ -70,38 +49,30 @@ function update(req, res) {
 }
 
 function edit(req, res) {
-  res.locals.labels = labels;
-  if (req.body && Object.keys(req.body).length > 0) {
+  function render(conference) {
     res.render('conferences/edit', {
       section: 'conferences',
-      conference: req.body,
-      errors: req.errors
+      conference,
+      errors: req.errors,
+      labels
     });
-    return;
-  }
-  if (!req.params.id) {
-    res.render('conferences/edit', {
-      section: 'conferences',
-      errors: req.errors
-    });
-    return;
   }
 
-  axios.get(`${config.api.baseUrl}/conferences/${req.params.id}/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
-    .then(({data}) => {
-      res.render('conferences/edit', {
-        section: 'conferences',
-        conference: data,
-        errors: req.errors
+  // if called with a req body, then this is a re-edit with errors
+  // if we have an id then we are editing a conference
+  // otherwise this is the first try to create a new conference
+  if (req.body && req.body.length > 0) {
+    return render(req.body);
+  } else if (req.params.id) {
+    return conferenceRepository.getConference(req.session.token, req.params.id)
+      .then((conference) => {
+        render(conference);
+      }, (error) => {
+        res.render('error');
       });
-    }, (error) => {
-      console.log(error);
-      res.render('error');
-    });
+  }
 
+  return render();
 }
 
 function remove(req, res) {
@@ -109,26 +80,19 @@ function remove(req, res) {
     res.redirect('/conferences');
   }
 
-  axios.delete(`${config.api.baseUrl}/conferences/${req.params.id}/`,
-    {
-      headers: {'Authorization': `Bearer ${req.session.token}`}
-    })
+  conferenceRepository.deleteConference(req.session.token, {id: req.params.id})
     .then(() => {
       req.flash('info', 'Conference deleted');
       res.redirect('/conferences');
     }, (error) => {
-      console.log(error);
       res.render('error');
     });
-
 }
 
 
 router.get('/', index);
-router.get('/add', edit);
-router.post('/add', update);
-router.get('/:id', edit);
-router.post('/:id', update);
+router.get(['/new','/:id/edit'], edit);
+router.post(['/new','/:id/edit'], update);
 router.get('/:id/remove', remove);
 
 

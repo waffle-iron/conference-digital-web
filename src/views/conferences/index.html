@@ -15,7 +15,7 @@
   <div class="row">
     <h1 class="display-4 heading">
       Conferences
-      <a href="/conferences/add" class="btn btn-primary btn-sm">Add conference</a>
+      <a href="/conferences/new" class="btn btn-primary btn-sm">Add conference</a>
     </h1>
     <p class="lead hidden-sm-down">
       Conferences are a place that a speech or a training course takes place. Bigger conferences will need to have
@@ -38,19 +38,19 @@
       {% for conference in conferences %}
         <tr>
           <td>
-            <a class="record-list__data-link" href="/conferences/{{ conference.id }}">{{ conference.title }}</a>
+            <a class="record-list__data-link" href="/conferences/{{ conference.id }}/edit">{{ conference.title }}</a>
           </td>
           <td class="hidden-sm-down">
-            <a class="record-list__data-link" href="/conferences/{{ conference.id }}">{{ conference.location.title }}</a>
+            <a class="record-list__data-link" href="/conferences/{{ conference.id }}/edit">{{ conference.location.title }}</a>
           </td>
           <td class="hidden-md-down">
-            <a class="record-list__data-link" href="/conferences/{{ conference.id }}">{{ conference.organiser }}</a>
+            <a class="record-list__data-link" href="/conferences/{{ conference.id }}/edit">{{ conference.organiser }}</a>
           </td>
           <td>
-            <a class="record-list__data-link" href="/conferences/{{ conference.id }}">{{ conference.start_datetime | formatDate('DD MMM YYYY') }}</a>
+            <a class="record-list__data-link" href="/conferences/{{ conference.id }}/edit">{{ conference.start_datetime | formatDate('DD MMM YYYY') }}</a>
           </td>
           <td class="hidden-lg-down">
-            <a class="btn btn-sm btn-secondary" href="/conferences/{{ conference.id }}">Edit</a>
+            <a class="btn btn-sm btn-secondary" href="/conferences/{{ conference.id }}/edit">Edit</a>
             <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-{{ conference.id }}-modal">Delete</button>
 
             <div id="delete-{{ conference.id }}-modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
