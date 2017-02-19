@@ -15,22 +15,26 @@
   "dependencies": {
     "axios": "^0.15.3",
     "body-parser": "^1.15.0",
-    "bootstrap": "^4.0.0-alpha.5",
+    "bootstrap": "^4.0.0-alpha.6",
     "compression": "^1.6.2",
     "express": "^4.13.4",
     "express-flash": "0.0.2",
     "express-session": "^1.14.1",
     "express-validator": "^3.0.0",
     "font-awesome": "^4.6.3",
+    "knex": "^0.12.6",
     "moment": "^2.17.1",
     "node-sass": "^3.13.0",
     "nunjucks": "^3.0.0",
-    "tether": "^1.3.7",
+    "pg": "^6.1.1",
+    "q": "^1.4.1",
+    "tether": "^1.4.0",
     "winston": "^2.3.0"
   },
   "devDependencies": {
-    "eslint": "^3.11.1",
     "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.11.1",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "sinon": "^1.17.6",
@@ -43,7 +47,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npm run lint:js",
     "lint:js": "eslint src/**/*.js",
-    "sass:watch": "node-sass src/sass/application.scss build/stylesheets/application.css --source-map build/stylesheets/application.css.map --source-map-contents --include-path ./node_modules/bootstrap/scss --include-path ./node_modules/font-awesome/scss -w -r",
+    "sass:watch": "node-sass src/stylesheets/application.scss build/stylesheets/application.css --source-map build/stylesheets/application.css.map --source-map-contents --include-path ./node_modules/bootstrap/scss --include-path ./node_modules/font-awesome/scss -w -r",
     "sass": "node-sass src/stylesheets/application.scss build/stylesheets/application.css --include-path ./node_modules/bootstrap/scss --include-path ./node_modules/font-awesome/scss -x --output-style compressed"
   }
 }

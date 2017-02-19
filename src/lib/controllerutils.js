@@ -1,20 +1,17 @@
-'use strict';
-
-function transformErrors(expressErrors) {
-
+function transformErrors (expressErrors) {
   if (!expressErrors) {
-    return null;
+    return null
   }
 
-  let errors = {};
+  let errors = {}
 
   for (let error of expressErrors) {
-    errors[error.param] = error.msg;
+    errors[error.param] = error.msg
   }
 
-  return errors;
+  return errors
 }
 
 module.exports = {
   transformErrors
-};
+}

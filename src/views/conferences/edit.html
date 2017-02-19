@@ -1,43 +1,57 @@
 {% extends "../layouts/layout.html" %}
 {% import "macros/forms.html" as forms %}
 
+{% block breadcrumb %}
+  <div class="container">
+    <a class="back-link" href="/conferences">< Back to conferences</a>
+  </div>
+{% endblock %}
+
 {% block main %}
-  <a href="/conferences">< Back to conferences</a>
-  {% if errors %}
-    <ul class="alert alert-danger" role="alert">
-      {% for name, item in errors %}
-      <li class="list-unstyled"><a href="#{{ name }}" class="alert-link">{{ labels[name] }}</a> - {{ item }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+  {{ forms.errorList(errors, labels) }}
 
-  <h1 class="display-4 heading">Conference</h1>
-  <p class="lead hidden-sm-down">
-    something about conferences</p>
+  <h1 class="display-2">
+    {% if conference.id %}
+      Edit conference
+    {% else %}
+      Add conference
+    {% endif %}
+  </h1>
 
-  <form class="padded-form form-adaptive" method="post">
+  <p class="lead hidden-sm-down">something about conferences</p>
 
-    {{ forms.textbox('title',
-      label=labels['title'],
-      value=conference.title,
-      error=errors.title)
-    }}
-    {{ forms.textarea(
-      name="description",
-      label=labels['description'],
-      value=conference.description,
-      error=errors.description)
-    }}
+  <form class="row" method="post">
+    <div class="col-md-8 col-xl-7">
+      {{ forms.textbox('title',
+        label=labels['title'],
+        value=conference.title,
+        error=errors.title)
+      }}
+      {{ forms.textarea(
+        name="description",
+        label=labels['description'],
+        value=conference.description,
+        error=errors.description)
+      }}
 
-    {{ forms.textbox('organiser',
-      label=labels['organiser'],
-      value=conference.organiser,
-      error=errors.organiser)
-    }}
+      {{ forms.textbox('organiser',
+        label=labels['organiser'],
+        value=conference.organiser,
+        error=errors.organiser)
+      }}
 
-    {{ forms.saveItemBar('conference', conference) }}
+      {{ forms.dropdown('location',
+        label=labels['location'],
+        emptyLabel='Select an option',
+        value=conference.location,
+        options=locations,
+        error=errors.location)
+      }}
 
-    <input type="hidden" name="id" value="{{ conference.id }}"/>
+      {{ forms.saveItemBar('conference', conference) }}
+
+      <input type="hidden" name="id" value="{{ conference.id }}"/>
+    </div>
   </form>
 
 {% endblock %}

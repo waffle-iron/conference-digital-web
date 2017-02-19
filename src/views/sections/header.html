@@ -1,0 +1,24 @@
+<header class="navbar navbar-inverse navbar-toggleable-sm bd-navbar navbar--header">
+  <nav class="container">
+    <div class="d-flex justify-content-between hidden-lg-up">
+      <a class="navbar-brand" href="/">Conference Digital</a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <div class="navbar-collapse collapse" id="bd-main-nav" aria-expanded="false">
+      <a class="navbar-brand hidden-md-down" href="/">
+        Conference Digital
+      </a>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-item nav-link{%if section == 'conferences'%} active{%endif%}" href="/conferences/">Conferences</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-item nav-link{%if section == 'locations'%} active{%endif%}" href="/locations/">Locations</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

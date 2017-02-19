@@ -1,8 +1,19 @@
 {
-  "extends": ["eslint:recommended"],
-  "env": {
-    "node": true,
-    "es6": true,
-    "browser": true
+  "extends": ["standard"],
+  "parser": "babel-eslint",
+  "globals": {
+    "afterEach": true,
+    "assert": true,
+    "beforeEach": true,
+    "describe": true,
+    "es": true,
+    "expect": true,
+    "ga": true,
+    "Image": true,
+    "it": true,
+    "spyOn": true,
+    "$": true,
+    "_gaq": true,
+    "require": true
   }
 }

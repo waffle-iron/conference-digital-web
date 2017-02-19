@@ -1,23 +1,30 @@
 @import "vars";
 
-@import "bootstrap-flex";
+@import "bootstrap";
 @import "font-awesome";
 
 @import "address";
-@import "colours";
-@import "flex";
-@import "forms";
 @import "header";
 @import "login";
-@import "nav";
-@import "type";
-@import "tables";
-@import "type";
 
-@-ms-viewport {
-  width: device-width;
+footer {
+  min-height: 3rem;
+  margin: 2rem 0;
 }
 
-@viewport {
-  width: device-width;
+.back-link {
+  display: inline-block;
+  margin: 1rem 0;
+}
+
+.form-group label {
+  @extend .font-weight-bold
+}
+
+.button-bar {
+  margin-top: 3rem;
+}
+
+.lead {
+  margin-bottom: 2rem;
 }

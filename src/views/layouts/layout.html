@@ -8,56 +8,21 @@
     <title>Conference Digital</title>
     <link href="{{asset_path}}stylesheets/application.css" rel="stylesheet">
   </head>
-  <body class="flex-layout">
-      <header>
-        <button class="navbar-toggler pull-xs-right hidden-md-up collapsed" type="button"
-                data-toggle="collapse"
-                data-target="#side-nav"
-                aria-controls="bd-main-nav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"><i class="fa fa-bars" aria-hidden="true"></i></button>
-        <a href="/" class="navbar-brand">Conference Digital</a>
-        <ul class="nav navbar-nav nav-dark pull-xs-right hidden-sm-down">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Zac Tolley</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-        </ul>
-      </header>
-      <div class="flex-body">
-        <main id="content" class="flex-body__content container">
-          {% block main %}{% endblock %}
-        </main>
-        <nav id="side-nav" class="flex-body__nav collapse" >
-          <ul class="nav side-nav nav-dark">
-            <li class="{%  if not section %}active{%  endif %}">
-              <a href="/">Overview</a>
-            </li>
-            <li class="{% if section == 'conferences' %}active{% endif %}">
-              <a href="/conferences">Conferences</a>
-            </li>
-            <li class="{% if section == 'locations' %}active{% endif %}">
-              <a href="/locations">Locations</a>
-            </li>
-            <li>
-              <a href="/speakers">Speakers</a>
-            </li>
-            <li class="hidden-sm-up">
-              <a href="/logout">Logout</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <footer>
-        {% block footer %}{% endblock %}
-      </footer>
+  <body>
+    {% include "../sections/header.html" %}
+    {% block breadcrumb %}{% endblock %}
+    <main class="container">
+      {% block main %}{% endblock %}
+    </main>
 
-      <!-- jQuery first, then Tether, then Bootstrap JS. -->
-      <script src="/js/jquery.min.js"></script>
-      <script src="/js/tether.min.js"></script>
-      <script src="/js/bootstrap.min.js"></script>
+    <footer>
+      {% block footer %}&nbsp;{% endblock %}
+    </footer>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/tether.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
   </body>
 </html>

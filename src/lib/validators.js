@@ -1,25 +1,24 @@
-var moment = require('moment');
+const moment = require('moment')
 
-function validUkDateString(value) {
-  return moment(value, 'DD/MM/YYYY').isValid();
+function validUkDateString (value) {
+  return moment(value, 'DD/MM/YYYY').isValid()
 }
 
-function hasOneOrMoreValues(value) {
+function hasOneOrMoreValues (value) {
   if (!value || value.length === 0) {
-    return false;
+    return false
   }
 
   if (Array.isArray(value)) {
     for (let item of value) {
-      if (item.length === 0) return false;
+      if (item.length === 0) return false
     }
   }
 
-  return true;
+  return true
 }
-
 
 module.exports = {
   validUkDateString,
   hasOneOrMoreValues
-};
+}

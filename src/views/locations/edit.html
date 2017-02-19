@@ -1,35 +1,48 @@
 {% extends "../layouts/layout.html" %}
 {% import "macros/forms.html" as forms %}
 
+{% block breadcrumb %}
+  <div class="container">
+    <a class="back-link" href="/locations">< Back to locations</a>
+  </div>
+{% endblock %}
+
 {% block main %}
-  <a href="/locations">< Back to locations</a>
   {{ forms.errorList(errors, labels) }}
 
-  <h1 class="display-4 heading">Location</h1>
+  <h1 class="display-2">
+    {% if location.id %}
+      Edit location
+    {% else %}
+      Add location
+    {% endif %}
+  </h1>
   <p class="lead hidden-sm-down">
     Locations are a place that a speech or a training course takes place. If a conference
     is simply a speech then the location is where that happens. If a conference has
     multiple workshops or classes in different rooms then you should have a location for
     each one of the 'cases'</p>
 
-  <form class="padded-form form-adaptive" method="post">
-    {{ forms.textbox('title',
-      label=labels['title'],
-      hint="Give this location a name so it's easy to recognise when selecting it from a list",
-      value=location.title,
-      error=errors.title)
-    }}
-    {{ forms.textarea(
-      name="description",
-      label=labels['description'],
-      value=location.description,
-      error=errors.description)
-    }}
+  <form class="row" method="post">
+    <div class="col-md-8 col-xl-7">
+      {{ forms.textbox('title',
+        label=labels['title'],
+        hint="Give this location a name so it's easy to recognise when selecting it from a list",
+        value=location.title,
+        error=errors.title)
+      }}
+      {{ forms.textarea(
+        name="description",
+        label=labels['description'],
+        value=location.description,
+        error=errors.description)
+      }}
 
-    {{ forms.address(location, labels=labels, errors=errors) }}
+      {{ forms.address(location, labels=labels, errors=errors) }}
 
-    {{ forms.saveItemBar('location', location) }}
+      {{ forms.saveItemBar('location', location) }}
 
-    <input type="hidden" name="id" value="{{ location.id }}"/>
+      <input type="hidden" name="id" value="{{ location.id }}"/>
+    </div>
   </form>
 {% endblock %}

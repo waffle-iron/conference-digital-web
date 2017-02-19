@@ -1,23 +1,19 @@
 @import 'colours';
 
-header {
-  flex: none;
-  display: block;
+.navbar-inverse {
   background: #222;
   color: $burnedOrange;
-  padding: 5px 20px;
-  overflow: hidden;
 
+  .navbar-brand,
   .navbar-toggler {
-    color: $lightGrey;
-  }
-
-  .navbar-brand {
     color: $burnedOrange;
     &:hover,
     &:focus {
       color: #fff;
     }
   }
+}
 
+.navbar--header {
+  margin-bottom: 1rem;
 }

@@ -41,13 +41,13 @@
 
   {{ textbox('address_town',
     label=labels['address_town'],
-    value=value.address_town,
+    value=value.town,
     error=errors.town)
   }}
 
   {{ textbox('address_county',
   label=labels['address_county'],
-  value=value.address_county,
+  value=value.county,
   error=errors.county)
   }}
 
@@ -59,7 +59,7 @@
 
   {{ textbox('address_country',
     label=labels['address_country'],
-    value=value.address_country,
+    value=value.country,
     error=errors.country)
   }}
 
@@ -107,4 +107,27 @@
   </div><!-- /.modal -->
   {% endif %}
 </div>
+{% endmacro %}
+
+{% macro dropdown(name, label, hint, emptyLabel, value, options, id, class, error) %}
+  {% if not id %}
+    {% set id = name.replace('.','-') %}
+  {% endif %}
+  <div class="form-group{% if error %} error{% endif %} {{ class }}" id="{{ name }}-wrapper">
+    <label class="form-label-bold" for="{{ id }}">{{ label }}</label>
+    {% if error %}<small class="form-text text-error">{{error}}</small>{% endif %}
+    <select id="{{ id }}" class="form-control" name="{{ name }}">
+      {% if emptyLabel %}<option value="">{{ emptyLabel }}</option>{% endif %}
+      {% for option in options  %}
+        {% if option.label %}
+          <option value="{{ option.value }}" {% if option.value == value %}selected="selected"{% endif %}>{{ option.label }}</option>
+        {% elif option.id %}
+          <option value="{{ option.id }}" {% if option.id == value %}selected="selected"{% endif %}>{{ option.title }}</option>
+        {% else %}
+          <option value="{{ option }}" {% if option == value %}selected="selected"{% endif %}>{{ option }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    {% if hint %}<small class="form-text text-muted">{{hint}}</small>{% endif %}
+  </div>
 {% endmacro %}

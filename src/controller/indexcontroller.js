@@ -1,7 +1,5 @@
-'use strict';
-
-function get(req, res) {
-  res.render('index');
+function get (req, res) {
+  res.redirect('/locations/')
 }
 
-module.exports = { get };
+module.exports = { get }

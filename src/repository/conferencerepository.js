@@ -1,66 +1,31 @@
-const axios = require('axios');
-const winston = require('winston');
-const BASE_URL = require('../../config').api.baseUrl;
+const knex = require('../db/knex')
 
-function getConference(token, conferenceId) {
-  return new Promise((resolve, reject) => {
-    axios.get(`${BASE_URL}/conferences/${conferenceId}/`,
-      { headers: {'Authorization': `Bearer ${token}`}})
-      .then(({data}) => {
-        return resolve(data);
-      }, (error) => {
-        //winston.error(error);
-        return reject(error);
-      });
-  });
+function Conferences () {
+  return knex('conferences')
 }
 
-function getConferences(token) {
-  return new Promise((resolve, reject) => {
-    axios.get(`${BASE_URL}/conferences/`,
-      { headers: {'Authorization': `Bearer ${token}`}}
-    )
-      .then((response) => {
-        winston.log(response);
-        resolve(response.data.results);
-      }, (error) => {
-        winston.error(error);
-        return reject(error);
-      });
-  });
+function getConference (conferenceId) {
+  return Conferences().where('id', conferenceId).first()
 }
 
-function saveConference(token, conference) {
-  return new Promise((resolve, reject) => {
-    const options = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      data: conference
-    };
-
-    if (conference.id && conference.id.length > 0) {
-      options.method = 'put';
-      options.url = `${BASE_URL}/conferences/${conference.id}/`;
-    } else {
-      options.method = 'post';
-      options.url = `${BASE_URL}/conferences/`;
-    }
-
-    axios(options)
-      .then(({data}) => {
-        return resolve(data);
-      }, (error) => {
-        //winston.error(error);
-        return reject(error);
-      });
-  });
+function getConferences () {
+  return Conferences().select()
 }
 
-function deleteConference(token, conference) {
-  return axios.delete(`${BASE_URL}/conferences/${conference.id}/`,
-    { headers: {'Authorization': `Bearer ${token}`}});
-
+function addConference (conference) {
+  return Conferences()
+    .insert(conference, 'id')
+    .then((result) => {
+      return result[0]
+    })
 }
 
-module.exports = { getConference, getConferences, saveConference, deleteConference };
+function updateConference (id, conference) {
+  return Conferences().where('id', id).update(conference)
+}
+
+function deleteConference (id) {
+  return Conferences().where('id', id).del()
+}
+
+module.exports = { getConference, getConferences, addConference, deleteConference, updateConference }
